@@ -1,0 +1,117 @@
+
+.create__card {
+    max-width: 400px;
+    margin: 20px auto;
+    border: 1px solid lightgray;
+    box-shadow: 0px 2px 5px 5px lightgrey;
+}
+
+h2{
+    width: 50px;
+    font-family: 'Indie Flower', cursive;
+    margin: 5px auto;
+    text-decoration: underline;
+}
+
+.create__card > input {
+    width:stretch;
+    margin: 15px 10px 0px 10px;
+    border: none;
+    border-bottom: 1px solid lightgray;
+    height: 25px;
+    
+    
+}
+
+
+.submit__button {
+    margin: 0px auto 20px auto;
+    border: 4px solid rgb(165, 151, 151);
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    border-radius: 25px;
+    background-color: rgb(34, 29, 29);
+    
+}
+
+.uploadButton {
+    position: relative;
+    display: block;
+    height: 50px;
+    width: 150px;
+    border: 4px solid rgb(78, 5, 78);
+    border-radius: 25px;
+    background-color:  rgb(130, 29, 150);
+    color: white;
+    text-align: center;
+    margin: 0px auto 20px auto;
+}
+
+.uploadIcon{
+    position: absolute;
+    margin: 0px 5px;   
+    top: 20%;
+}
+
+.uploadButton:hover{
+    border: 4px solid rgb(226, 106, 220);
+    background-color: rgb(78, 5, 78);
+    color:white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.create__card > input:hover{
+    border-bottom: 2px solid  rgb(117, 44, 136);
+    transform: scale(1.01);
+}
+
+.upload__button {
+    margin: 20px 10px;
+    position: relative;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.upload__label {
+    display: inline-block;
+    position: absolute;
+    z-index: 100;
+    height: 30px;
+    width: 100px;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    line-height: 27px;
+    background-color: rgb(83, 28, 90);
+    border-radius: 25px 0px 0px 25px;
+    font-family: 'Indie Flower', cursive;
+
+}
+
+input[type="file"]{
+    padding-left: 12px;
+    height: 30px;
+    flex: 1;
+}
+
+.addImage {
+    color: rgb(87, 35, 100);
+}
+
+.upload__button:hover {
+    cursor: pointer;
+    border-bottom: 2px solid rgb(100, 30, 117);
+    
+}
+
+
+
+
+
+
