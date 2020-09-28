@@ -6,8 +6,9 @@ const Post = mongoose.model('Post');
 
 router.get('/allpost', requireLogin, ( req, res) => {
     Post.find()
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name profilePic")
         .populate("comments.postedBy", "_id name")
+        .sort('-createdAt')
         .then( posts => {
             res.json({posts})
         })
@@ -20,8 +21,9 @@ router.get('/allpost', requireLogin, ( req, res) => {
 
 router.get('/allsubspost', requireLogin, ( req, res) => {
     Post.find({postedBy: {$in: req.user.followings}})
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name profilePic")
         .populate("comments.postedBy", "_id name")
+        .sort('-createdAt')
         .then( posts => {
             res.json({posts})
         })
@@ -63,7 +65,8 @@ router.post('/createpost', requireLogin, ( req, res ) => {
 router.get('/mypost', requireLogin, ( req, res) => {
     console.log(req.user)
     Post.find({postedBy: req.user._id})
-        .populate("postedBy", "_id email")
+        .populate("postedBy", "_id email profilePic")
+        .sort('-createdAt')
         .then( mypost => {
             res.json({mypost})
         })
@@ -82,7 +85,7 @@ router.put('/like', requireLogin, ( req, res) => {
         new : true
     })
     .populate("comments.postedBy", "_id name")
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profilePic")
     .exec((err, result) => {
         if(err){
             return res.status(422).json({error: err})
@@ -102,7 +105,7 @@ router.put('/unlike', requireLogin, ( req, res) => {
         new : true
     })
     .populate("comments.postedBy", "_id name")
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profilePic")
     .exec((err, result) => {
         if(err){
             return res.status(422).json({error: err})
@@ -127,7 +130,7 @@ router.put('/comment', requireLogin, ( req, res) => {
         new : true
     })
     .populate("comments.postedBy", "_id name")
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profilePic")
     .exec((err, result) => {
         if(err){
             return res.status(422).json({error: err})
@@ -162,6 +165,7 @@ router.delete('/delete/:postId', requireLogin, (req, res) => {
             }
         })
 })
+
 
 
 

@@ -11,6 +11,8 @@ import Home from './Component/Home/Home';
 import SubscribePost from './Component/SubscribePost/SubscribePost';
 import UserProfile from './Component/UserProfile/UserProfile';
 import {userReducer, initialState} from './reducer/userReducer';
+import ResetPassword from "./Component/Signup/ResetPassword";
+import NewPassword from './Component/Signup/NewPassword';
 
 import {UserProvider} from './Context/UserContext'
 
@@ -26,7 +28,8 @@ const Routing = ({setUser}) => {
         
       }
       else{
-        history.push('/signin');
+        if(!history.location.pathname.startsWith('/reset'))
+          history.push('/signin');
       }
 
       
@@ -41,6 +44,8 @@ const Routing = ({setUser}) => {
       <Route path="/create" component={Create} />
       <Route path="/profile/:userid" component={UserProfile} />
       <Route path="/subspost" component={SubscribePost} />
+      <Route exact path= "/reset" component={ResetPassword} />
+      <Route path="/reset/:token" component={NewPassword} />
     </Switch>
   )
 }

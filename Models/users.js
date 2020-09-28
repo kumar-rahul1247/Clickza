@@ -14,12 +14,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    resetToken: String,
+    expireToken: Date,
     profilePic:{
         type: String,
         required: false
     },
     followers: [{type: ObjectId, ref: "User"}],
-    followings: [{type: ObjectId, ref: "User"}]
+    followings: [{type: ObjectId, ref: "User"}],
+    
 
 });
 

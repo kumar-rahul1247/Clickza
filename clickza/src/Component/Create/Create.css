@@ -7,10 +7,10 @@
 }
 
 h2{
-    width: 50px;
+    width: fit-content;
     font-family: 'Indie Flower', cursive;
     margin: 5px auto;
-    text-decoration: underline;
+    
 }
 
 .create__card > input {

@@ -1,117 +1,131 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import './Create.css'
 
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Spinner from '../Spinner/spinner';
+
 
 function Create(props) {
 
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const [image, setImage]= useState(null);
+    const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if(imageUrl){
+        if (imageUrl) {
             postData();
         }
 
-    },[imageUrl] )
+    }, [imageUrl])
 
     let onUploadHandler = () => {
         console.log(title, body, image)
-        if(!title || !body || !image){
+        if (!title || !body || !image) {
 
             return setError("All fields are mandotry")
         }
-
+        
+        setIsLoading(true);
         const data = new FormData();
         data.append("file", image);
-        data.append("upload_preset","clickza");
+        data.append("upload_preset", "clickza");
         data.append("cloud_name", "reyhul")
-        
+
         fetch('	https://api.cloudinary.com/v1_1/reyhul/image/upload', {
             method: "post",
             body: data
-    })
-        .then( res => res.json())
-        .then(data => {
-            setImageUrl(data.url);
-            
-            console.log(data)
         })
-        .catch(err => {
-            console.log(err)
-        })
+            .then(res => res.json())
+            .then(data => {
+                setImageUrl(data.url);
+                console.log(data)
+            })
+            .catch(err => {
+                setIsLoading(false)
+                setError("Something went wrong...!!")
+                console.log(err)
+            })
     }
 
     const postData = () => {
-        console.log("Here",title,body,imageUrl)
+        console.log("Here", title, body, imageUrl)
         fetch('/createpost', {
             method: "post",
-            headers:{
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization":"Bearer "+localStorage.getItem("jwt")
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
-            body:JSON.stringify({
+            body: JSON.stringify({
                 title,
                 body,
-                pic:imageUrl
+                pic: imageUrl
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            if(data.error) {
-                setError({error: data.error})
-            }
-            else {
-                props.history.push('/');
-            }
-        
-        })
-        .catch(err => console.log(err.message))
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setIsLoading(false)
+                if (data.error) {
+                    setError({ error: data.error })
+                }
+                else {
+                    props.history.push('/');
+                }
+
+            })
+            .catch(err => {
+                setIsLoading(false);
+                setError("Unable to upload. Something went Wrong")
+                console.log(err.message)
+            })
 
     }
-    
+
     return (
         <div>
             <div className="create__card">
                 <h2>Post</h2>
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    onChange={(event)=> setTitle(event.target.value)}
-                />
+                {
+                    isLoading ? <Spinner /> : 
+                    <>
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Title"
+                            onChange={(event) => setTitle(event.target.value)}
+                        />
 
-                <input
-                    type="text"
-                    name="desc"
-                    placeholder="Description"
-                    onChange={(event)=> setBody(event.target.value)}
-                />
-                <div className="upload__button">
-                    <label htmlFor="uploadImg" className="upload__label ">Upload Image</label>
-                    <input
-                        id="uploadImg"
-                        type="file"
-                        name="file"
-                        onChange= {(event) => setImage(event.target.files[0])}
-                    />
-                    <AddPhotoAlternateIcon className="addImage"/>
-                </div>
+                        <input
+                            type="text"
+                            name="desc"
+                            placeholder="Description"
+                            onChange={(event) => setBody(event.target.value)}
+                        />
+                        <div className="upload__button">
+                            <label htmlFor="uploadImg" className="upload__label ">Upload Image</label>
+                            <input
+                                id="uploadImg"
+                                type="file"
+                                name="file"
+                                onChange={(event) => setImage(event.target.files[0])}
+                            />
+                            <AddPhotoAlternateIcon className="addImage" />
+                        </div>
 
-                <button 
-                    type="submit" 
-                    className="uploadButton"
-                    onClick={onUploadHandler}
-                    >
-                    Submit Post <CloudUploadIcon className="uploadIcon" />
-                </button>
+                        <button
+                            type="submit"
+                            className="uploadButton"
+                            onClick={onUploadHandler}
+                        >
+                            Submit Post <CloudUploadIcon className="uploadIcon" />
+                        </button>
 
-
+                    </>
+                }
 
 
             </div>

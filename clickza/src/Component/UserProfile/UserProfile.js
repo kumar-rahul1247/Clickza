@@ -2,12 +2,15 @@ import React, { useEffect, useState, useContext } from 'react'
 // import './UserProfile.css'
 import { UserContext } from '../../Context/UserContext';
 import { useParams } from 'react-router-dom';
+import Spinner from '../Spinner/spinner';
+import NoPic from '../../StaticImage/noProfilePic.jpg'
 
 function UserProfile() {
     console.log("START")
     const [userProfile, setUserProfile] = useState(null);
     const { user, setUser } = useContext(UserContext);
     const { userid } = useParams();
+    //const [isLoading, setIsLoading] = useState(true);
   
 
 
@@ -26,7 +29,8 @@ function UserProfile() {
                 console.log("Terrinlr")
             })
 
-    }, [])
+    }, [userid])
+
 
     const followUserHandler = () => {
 
@@ -96,15 +100,27 @@ function UserProfile() {
 
     return (
         <>
-            {!userProfile ? <h2 style ={{textDecoration:"none", margin: "150px auto"}}> Loading.....!! </h2> : (
+            {!userProfile ? <><h2 style ={{textDecoration:"none", margin: "150px auto"}}> Loading.....!! </h2><Spinner/></> : (
 
                 <div className="profile__container">
                     <div className="profile__upper">
                         <div className="profile__image">
-                            <img className="image"
-                                src="https://images.unsplash.com/photo-1590217283222-063e4fa266c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                                alt="RK"
-                            />
+                        {
+                                    userProfile && userProfile.user.profilePic ? ( 
+                                        <img className="image"
+                                            src={userProfile.user && userProfile.user.profilePic}
+                                            alt="RK"
+                                        />
+                                    ) : (
+                                            <img className="image"
+                                                src={NoPic}
+                                                alt="RK"
+                                            />
+                                        )
+
+
+
+                        }
                         </div>
 
                         <div className="profile__content">

@@ -3,13 +3,15 @@ import './Profile.css'
 import { UserContext } from '../../Context/UserContext';
 import NoPic from '../../StaticImage/noProfilePic.jpg'
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import Spinner from '../Spinner/spinner';
 
 function Profile() {
 
-    const [myphoto, setMyPhoto] = useState([]);
+    const [myphoto, setMyPhoto] = useState(null);
     const { user, setUser } = useContext(UserContext);
     const [profilePic, setProfilePic] = useState(null);
     const [picurl, setPicurl] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         console.log("I am Use" + user)
@@ -19,12 +21,17 @@ function Profile() {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
         })
-            .then(res => res.json())
-            .then(result => {
-                console.log(result)
-                console.log(user)
-                setMyPhoto(result.mypost)
-            })
+        .then(res => res.json())
+        .then(result => {
+            console.log(result)
+            console.log(user)
+            setMyPhoto(result.mypost)
+        })
+        .catch( err => {
+            
+            setError("Something went wrong. Please try after some time..!!")
+            console.log(err)
+        })
 
     }, [])
 
@@ -45,11 +52,11 @@ function Profile() {
             .then( res => res.json())
             .then(data => {
                 setPicurl(data.url);
-                console.log("FIle At URL")
-                console.log(data)
+                
             })
             .catch(err => {
-                console.log(err)
+               
+                setError("Something went wrong. Please try after some time..!!")
             })
         }
 
@@ -72,13 +79,12 @@ function Profile() {
             })
             .then( res => res.json())
             .then( data => {
-                console.log("FIle At Inside Mongo")
-                console.log(data)
+                
                 setUser(data);
                 localStorage.setItem('user', JSON.stringify(data))
             })
             .catch( err=> {
-                console.log(err)
+                setError("Something went wrong. Please try after some time..!!")
             })
         }
     }, [picurl])
@@ -88,7 +94,7 @@ function Profile() {
 
         <>
             {
-                !user ? <h2 style={{ textDecoration: "none", margin: "150px auto" }}> Loading.....!! </h2> : (
+                !user ? <><h2 style={{ textDecoration: "none", margin: "150px auto" }}> Loading.....!! </h2><Spinner/></> : (
 
                     <div className="profile__container">
                         <div className="profile__upper">
@@ -123,7 +129,7 @@ function Profile() {
                                 <h2>{user ? user.name : null}</h2>
                                 <h4 style={{ fontWeight: 500, fontSize: "16px" }}>{user && user.email}</h4>
                                 <div className="profile__summary">
-                                    <h5>{myphoto.length} posts</h5>
+                                    <h5>{myphoto ? myphoto.length : 0} posts</h5>
                                     <h5>{user.followers.length} followers</h5>
                                     <h5>{user.followings.length} following</h5>
                                 </div>
@@ -131,6 +137,8 @@ function Profile() {
                         </div>
                         <div className="profile__gallery">
                             {
+                                error ? <p className="ErrorMessage">{error}</p> :
+                                !myphoto ? <Spinner/> :
                                 myphoto.map(item => (
                                     <img
                                         className="item"
