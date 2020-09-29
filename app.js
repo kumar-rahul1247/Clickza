@@ -29,11 +29,14 @@ app.use(require('./Routes/user'))
 
 
 if(process.env.NODE_ENV === "production"){
+    console.log("I am In")
+
     app.use(express.static('clickza/build'))
 
     const path = require('path')
+    
     app.get("/*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'clickza', 'index.html'))
+        res.sendFile(path.resolve(__dirname, 'clickza','build', 'index.html'))
     })
 }
 
